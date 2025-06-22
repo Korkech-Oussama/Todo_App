@@ -3,7 +3,7 @@ import TodoForm from './TodoForm'
 import TodoList from './TodoList'
 
 const TodoApp = () => {
-  const storedItems = JSON.parse(localStorage.getItem('todos'))
+  const storedItems = JSON.parse(localStorage.getItem('todos')) || []
   const [todos,setTodos] = useState(storedItems)
 
   const addTodo = (text) =>{
