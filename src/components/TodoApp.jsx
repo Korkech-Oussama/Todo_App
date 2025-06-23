@@ -3,8 +3,10 @@ import TodoForm from './TodoForm'
 import TodoList from './TodoList'
 
 const TodoApp = () => {
-  const storedItems = JSON.parse(localStorage.getItem('todos')) || []
-  const [todos,setTodos] = useState(storedItems)
+  const [todos,setTodos] = useState(() =>{
+     const stored = localStorage.getItem('todos')
+       return stored ? JSON.parse(stored) : []
+  })
 
   const addTodo = (text) =>{
         const newTodo = {
@@ -14,9 +16,15 @@ const TodoApp = () => {
         }
         setTodos([...todos,newTodo])
   }
+  const handleToggle = (id) =>{
+        const updatedTodos = todos.map(todo =>
+          todo.id === id ? {...todo, completed :!todo.completed} : todo
+        )
+        setTodos(updatedTodos)
+  }
+
   useEffect(() =>{
       localStorage.setItem('todos',JSON.stringify(todos))
-      
   },[todos])
 
   const handleDelete = (id) =>{
@@ -27,8 +35,9 @@ const TodoApp = () => {
   console.log(localStorage)
   return (
     <div className='container'>
+        <h1 className='text-5xl font-semibold'>Todo App</h1>
         <TodoForm onAdd={addTodo}/>
-        <TodoList handleDelete={handleDelete} todos={todos}/>
+        <TodoList handleDelete={handleDelete} todos={todos} handleToggle={handleToggle}/>
     </div>
   )
 }
